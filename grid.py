@@ -18,8 +18,7 @@ def read_input():
         if (temp[2] == 1):
             data[temp[1]-1][temp[0]-1] = 1
         i += 1
-    print(start)
-    print(end)
+        
     generate_grid(size[1], size[0], data, start, end)
 
 
