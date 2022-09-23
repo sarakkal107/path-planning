@@ -18,7 +18,6 @@ def read_input():
         if (temp[2] == 1):
             data[temp[1]-1][temp[0]-1] = 1
         i += 1
-        
     generate_grid(size[1], size[0], data, start, end)
 
 
@@ -26,7 +25,7 @@ def generate_grid(x, y, data, start, end):
     fig, ax = plt.subplots(1, 1, tight_layout=True)
     my_cmap = matplotlib.colors.ListedColormap(['grey'])
     my_cmap.set_bad(color='w', alpha=0)
-    for x in range(x + 1):
+    for x in range(x+1):
         ax.axhline(x, lw=2, color='k', zorder=5)
     for y in range(y+1):
         ax.axvline(y, lw=2, color='k', zorder=5)
@@ -47,7 +46,8 @@ def generate_grid(x, y, data, start, end):
     plt.yticks(locs, labels)
 
     ax.xaxis.tick_top()
-    ax.scatter(start[0]-1, y-start[1], s=50, zorder=50, label="Start")
-    ax.scatter(end[0]-1, y-end[1], s=50, zorder=50, label="End")
+    ax.scatter(start[0]-1, x-start[1]+1, s=50, zorder=50, label="Start")
+    ax.scatter(end[0]-1, x-end[1]+1, s=50, zorder=50, label="End")
     ax.legend()
+    plt.axis('off')
     plt.show()
