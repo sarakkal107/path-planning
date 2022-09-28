@@ -12,8 +12,8 @@ def read_input(inputFile):
     size = list(map(int, contents[2].strip().split(" ")))
 
     visualizeData = np.full([size[1], size[0]], np.nan)
-    data = [[0 for i in range(0,size[0])] # 0s for x
-            for j in range(0,size[1])]  # 0s for y
+    data = [[0 for i in range(0, size[0])]  # 0s for x
+            for j in range(0, size[1])]  # 0s for y
     i = 3
 
     while i < len(contents):
@@ -22,7 +22,7 @@ def read_input(inputFile):
             visualizeData[temp[1]-1][temp[0]-1] = 1
             data[temp[1]-1][temp[0]-1] = 1
         i += 1
-    generate_grid(size[1], size[0], visualizeData, start, end)
+    #generate_grid(size[1], size[0], visualizeData, start, end)
     return start, end, size, data, visualizeData
 
     # reads in the grid information
@@ -103,4 +103,3 @@ def generate_grid(x, y, data, start, end):
 #     addEdges(vertexX, vertexY, vertexX, vertexY-1, data, size, adjacents)
 #     addEdges(vertexX, vertexY, vertexX-1, vertexY-1, data, size, adjacents)
 #     addEdges(vertexX, vertexY, vertexX+1, vertexY-1, data, size, adjacents)
-

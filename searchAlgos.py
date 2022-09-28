@@ -24,8 +24,8 @@ def algosMain(start,goal, data, size, adjacents, typeOfAlgo):
         if s.coords[0] == goal[0]:
             if s.coords[1] == goal[1]:
                 return s
-        print(s.coords)
-        print("s coords")
+        #print(s.coords)
+        #print("s coords")
         add_vertex(s, adjacents)
         addAdjacents(s,data,size,adjacents)
         term = str([s.coords[0],s.coords[1]])
