@@ -24,50 +24,29 @@ def algosMain(start,goal, data, size, adjacents, typeOfAlgo):
         #print(s.coords)
         #print("s coords")
 
+        add_vertex(s, adjacents)
+        addAdjacents(s,data,size,adjacents)
         term = str([s.coords[0],s.coords[1]])
         closedSet.add(term)
         #print(adjacents[term])
         print("Current Vertex: " + term + ", H: " + str(s.h) + " , F:" + str(s.f) + " , G:" + str(s.g))
-        for count in range(8):
-            sX = s.coords[0]
-            sY = s.coords[1]
-            if count == 0:
-                adjacentX = sX
-                adjacentY = sY - 1
-            elif count == 1:
-                adjacentX = sX
-                adjacentY = sY + 1
-            elif count == 2:
-                adjacentX = sX + 1
-                adjacentY = sY + 1
-            elif count == 3:
-                adjacentX = sX + 1
-                adjacentY = sY - 1
-            elif count == 4:
-                adjacentX = sX + 1
-                adjacentY = sY
-            elif count == 5:
-                adjacentX = sX - 1
-                adjacentY = sY
-            elif count == 7:
-                adjacentX = sX - 1
-                adjacentY = sY + 1
-            elif count == 8:
-                adjacentX = sX - 1
-                adjacentY = sY - 1
-            if not isEdge(sX,sY,adjacentX,adjacentY,data,size):
-                continue
-            adjacentVertex = Vertex(None, [adjacentX, adjacentY])
-            adjacentTerm = str([adjacentX,adjacentY])
+        for adjacentVertexCoords in adjacents[term]:
+            adjacentVertex = Vertex(None, [adjacentVertexCoords[0], adjacentVertexCoords[1]])
+            adjacentTerm = str([adjacentVertexCoords[0],adjacentVertexCoords[1]])
             if not adjacentTerm in closedSet:
+                #print(adjacentTerm)
+                #print(adjacentVertex)
+                #print (not fringe.contains(adjacentVertex))
                 if not fringe.contains(adjacentVertex):
                     adjacentVertex.setG(math.inf)
                     adjacentVertex.setParent(None)
+                #print("about to update Vertex")
                     if (typeOfAlgo == "aStar"):
                         fringe = updateAStarVertex(s,adjacentVertex,fringe,data, size, goal)
                     elif (typeOfAlgo == "thetaStar"):
                         fringe = updateThetaStarVertex(s,adjacentVertex,fringe,data, size, goal)
-        
+                    
+                #print("updated vertex")
 
     return None
 
@@ -155,7 +134,7 @@ def updateThetaStarVertex(s, adjacentVertex, fringe, data, size, goal):
 def distanceFormula(vertex, vertex2):
     return math.sqrt((vertex.coords[0]-vertex2.coords[0])**2 +  (vertex.coords[1]-vertex2.coords[1])**2)
 
-def isEdge(curVertexX, curVertexY, nextVertexX, nextVertexY, data, size):
+def addEdges(curVertexX, curVertexY, nextVertexX, nextVertexY, data, size, graph):
     if not (0 < nextVertexX and 0 < nextVertexY and nextVertexX <= size[0] + 1 and nextVertexY <= size[1] + 1):
         return
     sizeX = size[0]
@@ -163,23 +142,46 @@ def isEdge(curVertexX, curVertexY, nextVertexX, nextVertexY, data, size):
     if (curVertexX == nextVertexX):
         if (nextVertexY < curVertexY):
             if (curVertexX < sizeX + 1 and data[nextVertexY-1][curVertexX-1]==0) or (0 < curVertexX - 1 and data[nextVertexY-1][curVertexX-2]==0):
-                return True
+                add_edge_weight(curVertexX, curVertexY, nextVertexX, nextVertexY, graph, 1)
         else:
             if (curVertexX < sizeX + 1 and data[curVertexY-1][curVertexX-1]==0) or (0 < curVertexX - 1 and data[curVertexY-1][curVertexX-2]==0):
-                return True
+                add_edge_weight(curVertexX, curVertexY, nextVertexX, nextVertexY, graph, 1)
     elif (curVertexY == nextVertexY):
         if (nextVertexX < curVertexX):
             if (curVertexY < sizeY + 1 and data[curVertexY-1][nextVertexX-1]==0) or (0 < curVertexY - 1 and data[curVertexY-2][nextVertexX-1]==0):
-                return True
+                add_edge_weight(curVertexX, curVertexY, nextVertexX, nextVertexY, graph, 1)
         else:
             if (curVertexY < sizeY + 1 and data[curVertexY-1][curVertexX-1]==0) or (0 < curVertexY - 1 and data[curVertexY-2][curVertexX-1]==0):
-                return True
+                add_edge_weight(curVertexX, curVertexY, nextVertexX, nextVertexY, graph, 1)
     else:
         if ((curVertexY < nextVertexY) and (curVertexX > nextVertexX) and data[curVertexY-1][nextVertexX-1]==0):
-            return True
+            add_edge_weight(curVertexX, curVertexY, nextVertexX, nextVertexY, graph, math.sqrt(2)) #lower left
         elif ((curVertexY < nextVertexY) and (curVertexX < nextVertexX) and data[curVertexY-1][curVertexX-1]==0):
-            return True
+            add_edge_weight(curVertexX, curVertexY, nextVertexX, nextVertexY, graph, math.sqrt(2)) #lower left
         elif ((curVertexY > nextVertexY) and (curVertexX > nextVertexX) and data[nextVertexY-1][nextVertexX-1]==0):
-            return True
+            add_edge_weight(curVertexX, curVertexY, nextVertexX, nextVertexY, graph, math.sqrt(2)) #upper left
         elif ((curVertexY > nextVertexY) and (curVertexX < nextVertexX) and data[nextVertexY-1][curVertexX-1]==0):
-            return True
+            add_edge_weight(curVertexX, curVertexY, nextVertexX, nextVertexY, graph, math.sqrt(2)) #upper right
+
+def addAdjacents(vertex, data, size, adjacents):
+    vertexX = vertex.coords[0]
+    vertexY = vertex.coords[1]
+    addEdges(vertexX, vertexY, vertexX+1, vertexY, data, size, adjacents)
+    addEdges(vertexX, vertexY, vertexX-1, vertexY, data, size, adjacents)
+    addEdges(vertexX, vertexY, vertexX+1, vertexY+1, data, size, adjacents)
+    addEdges(vertexX, vertexY, vertexX-1, vertexY+1, data, size, adjacents)
+    addEdges(vertexX, vertexY, vertexX, vertexY+1, data, size, adjacents)
+    addEdges(vertexX, vertexY, vertexX, vertexY-1, data, size, adjacents)
+    addEdges(vertexX, vertexY, vertexX-1, vertexY-1, data, size, adjacents)
+    addEdges(vertexX, vertexY, vertexX+1, vertexY-1, data, size, adjacents)
+
+def add_vertex(vertex, graph):
+    v = str([vertex.coords[0],vertex.coords[1]])
+    graph[v] = []
+    
+def add_edge_weight(x1,y1, x2, y2, graph, w):
+    v1 = str([x1,y1])
+    v2 = str([x2,y2])
+    newEdge = [x2,y2,w]
+    graph[v1].append([x2,y2])
+

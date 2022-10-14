@@ -1,4 +1,4 @@
-import tkinter as tk
+#import tkinter as tk
 import grid
 from classes.Vertex import Vertex
 import searchAlgos
@@ -6,25 +6,18 @@ import matplotlib.pyplot as plt
 import matplotlib
 
 
-def start_gui():
-    window = tk.Tk()
-    window.minsize(200, 200)
-    window.title("Path Planning")
-    greeting = tk.Label(text="Hello, Tkinter")
-    greeting.pack()
-    window.mainloop()
-
-
 class App():
 
-    def __init__(self, inputFile, typeOfAlgo):
+    def __init__(self, inputOrTest, typeOfAlgo,inputFileOrTestPath):
 
-        start, goal, size, data, visualizeData = grid.read_input(inputFile)
 
+        if (inputOrTest):
+            start, goal, size, data, visualizeData = grid.read_input(inputFileOrTestPath)
+        else:
+            start, goal, size, data, visualizeData = grid.generate_test(inputFileOrTestPath)
+        grid.generate_grid(size[0],size[1], data, start, goal)
         adjacents = {}
-        goalVertex = searchAlgos.algosMain(
-            start, goal, data, size, adjacents, typeOfAlgo)
-        print("finished Algo")
+        goalVertex = searchAlgos.algosMain(start, goal, data, size, adjacents, typeOfAlgo)
         if goalVertex == None:
             print("No path found")
             return
@@ -37,7 +30,7 @@ class App():
         x, y = size[1], size[0]
         fig, ax = plt.subplots(1, 1, tight_layout=True)
         fig.suptitle(title, fontsize=20)
-        my_cmap = matplotlib.colors.ListedColormap(['lightgrey'])
+        my_cmap = matplotlib.colors.ListedColormap(['grey'])
         my_cmap.set_bad(color='w', alpha=0)
         for x in range(x+1):
             ax.axhline(x, lw=2, color='k', zorder=5)
@@ -68,7 +61,7 @@ class App():
         plt.axis('off')
 
         current = goalVertex
-
+        print("Path from Goal to Start")
         #print(str(size[0]) + " : " + str(size[1]))
         while (current.coords != start):
             currentParent = current.parent
@@ -78,12 +71,12 @@ class App():
             y1 = currentCoords[1]
             x2 = parentCoords[0]
             y2 = parentCoords[1]
+            print([x1,y1])
 
-            # print("(" + str(x1) + ", " +
-            #      str(y1) + ") -> (" + str(x2) + ", " + str(y2) + ") : C" + str(x1-1) + ", " +
-            #      str(size[1]-y1+1) + ") -> (" + str(x2-1) + ", " + str(size[1]-y2+1) + ")")
+
             a = plt.plot([x1-1, x2-1], [size[1]-y1+1, size[1]-y2+1],
                          zorder=50, color='red', linewidth=3, linestyle='dashed', clip_on=False)
             current = currentParent
+        print(start)
 
         plt.show()

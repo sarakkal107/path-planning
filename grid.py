@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
 import math
+import random
 
 
 def read_input(inputFile):
@@ -17,7 +18,7 @@ def read_input(inputFile):
     i = 3
 
     while i < len(contents):
-        temp = list(map(int, contents[i].strip().split(" ")))
+        temp = list(map(int, contents[i].split()))
         if (temp[2] == 1):
             visualizeData[temp[1]-1][temp[0]-1] = 1
             data[temp[1]-1][temp[0]-1] = 1
@@ -27,6 +28,61 @@ def read_input(inputFile):
 
     # reads in the grid information
 
+def generate_test(filePath):
+    sizeX = 100
+    sizeY = 50
+    data = create_grid_with_blocks()
+    startX = 0
+    startY = 0
+    goalX = 0
+    goalY = 0
+    validStart = False
+    validGoal = False
+    while not validStart:
+        startX = random.randint(1,101)
+        startY = random.randint(1,51)
+
+        for count in range(4): #make sure that vertex isn't surrounded by 4 blocked cells
+            if count == 0:
+                adjacentX = startX
+                adjacentY = startY + 1
+            if count == 1:
+                adjacentX = startX
+                adjacentY = startY - 1
+            elif count == 2:
+                adjacentX = startX + 1
+                adjacentY = startY
+            elif count == 3:
+                adjacentX = startX - 1
+                adjacentY = startY
+            if (adjacentX > 0 and adjacentY > 0) and (adjacentX <=  100 and adjacentY <= 50) and (data[adjacentY - 1][adjacentX - 1]):
+                validStart = True
+                break
+    while not validGoal:
+        goalX = random.randint(1,101)
+        startY = random.randint(1,51)
+
+        for count in range(4): #make sure that vertex isn't surrounded by 4 blocked cells
+            if count == 0:
+                adjacentX = startX
+                adjacentY = startY + 1
+            if count == 1:
+                adjacentX = startX
+                adjacentY = startY - 1
+            elif count == 2:
+                adjacentX = startX + 1
+                adjacentY = startY
+            elif count == 3:
+                adjacentX = startX - 1
+                adjacentY = startY
+            if (adjacentX > 0 and adjacentY > 0) and (adjacentX <=  100 and adjacentY <= 50) and (data[adjacentY - 1][adjacentX - 1]) and (startX != goalX or startY != goalY):
+                validGoal = True
+                break
+    start = [startX,startY]
+    goal = [goalX,goalY]
+    size = [sizeX,sizeY]
+    saveGrid(start,goal,size,data,filePath)
+    return start,goal,size, data, data
 
 def generate_grid(x, y, data, start, end):
     fig, ax = plt.subplots(1, 1, tight_layout=True)
@@ -59,47 +115,30 @@ def generate_grid(x, y, data, start, end):
     plt.axis('off')
     plt.show()
 
-# def addEdges(curVertexX, curVertexY, nextVertexX, nextVertexY, data, size, graph):
-#     if not (0 < nextVertexX and 0 < nextVertexY and nextVertexX <= size[0] + 1 and nextVertexY <= size[1] + 1):
-#         return
-#     sizeX = size[0]
-#     sizeY = size[1]
-#     #curVertexX = curVertex[1]
-#     #curVertexY = curVertex[0]
-#     #nextVertexX = nextVertex[1]
-#     #nextVertexY = nextVertex[0]
-#     if (curVertexX == nextVertexX):
-#         if (nextVertexY < curVertexY):
-#             if (curVertexX < sizeX + 1 and data[nextVertexY-1][curVertexX-1]==0) or (0 < curVertexY and data[nextVertexY-1][curVertexX-2]==0):
-#                 add_edge_weight(curVertexX, curVertexY, nextVertexX, nextVertexY, graph, 1)
-#         else:
-#             if (curVertexX < sizeX + 1 and data[curVertexY-1][curVertexX-1]==0) or (0 < curVertexY and data[curVertexY-1][curVertexX-2]==0):
-#                 add_edge_weight(curVertexX, curVertexY, nextVertexX, nextVertexY, graph, 1)
-#     elif (curVertexY == nextVertexY):
-#         if (nextVertexX < curVertexX):
-#             if (curVertexY < sizeY + 1 and data[curVertexY-1][nextVertexX-1]==0) or (0 < curVertexY and data[curVertexY-2][nextVertexX-1]==0):
-#                 add_edge_weight(curVertexX, curVertexY, nextVertexX, nextVertexY, graph, 1)
-#         else:
-#             if (curVertexY < sizeY + 1 and data[curVertexY-1][curVertexX-1]==0) or (0 < curVertexY and data[curVertexY-2][curVertexX-1]==0):
-#                 add_edge_weight(curVertexX, curVertexY, nextVertexX, nextVertexY, graph, 1)
-#     else:
-#         if ((curVertexY < nextVertexY) and (curVertexX > nextVertexX) and data[curVertexY-1][nextVertexX-1]==0):
-#             add_edge_weight(curVertexX, curVertexY, nextVertexX, nextVertexY, graph, math.sqrt(2)) #lower left
-#         elif ((curVertexY < nextVertexY) and (curVertexX < nextVertexX) and data[curVertexY-1][curVertexX-1]==0):
-#             add_edge_weight(curVertexX, curVertexY, nextVertexX, nextVertexY, graph, math.sqrt(2)) #lower left
-#         elif ((curVertexY > nextVertexY) and (curVertexX > nextVertexX) and data[nextVertexY-1][nextVertexX-1]==0):
-#             add_edge_weight(curVertexX, curVertexY, nextVertexX, nextVertexY, graph, math.sqrt(2)) #upper left
-#         elif ((curVertexY > nextVertexY) and (curVertexX < nextVertexX) and data[nextVertexY-1][curVertexX-1]==0):
-#             add_edge_weight(curVertexX, curVertexY, nextVertexX, nextVertexY, graph, math.sqrt(2)) #upper right
+def blocking():
+    numIn100 = random.randint(1,100)
+    if numIn100 < 11:
+        return 1
+    else:
+        return 0
 
-# def addAdjacents(vertex, data, size, adjacents):
-#     vertexX = vertex.coords[0]
-#     vertexY = vertex.coords[1]
-#     addEdges(vertexX, vertexX+1, vertexY, data, size, adjacents)
-#     addEdges(vertexX, vertexY, vertexX-1, vertexY, data, size, adjacents)
-#     addEdges(vertexX, vertexY, vertexX+1, vertexY+1, data, size, adjacents)
-#     addEdges(vertexX, vertexY, vertexX-1, vertexY+1, data, size, adjacents)
-#     addEdges(vertexX, vertexY, vertexX, vertexY+1, data, size, adjacents)
-#     addEdges(vertexX, vertexY, vertexX, vertexY-1, data, size, adjacents)
-#     addEdges(vertexX, vertexY, vertexX-1, vertexY-1, data, size, adjacents)
-#     addEdges(vertexX, vertexY, vertexX+1, vertexY-1, data, size, adjacents)
+def create_grid_with_blocks():
+    grid = [[blocking() for i in range(100)] for j in range(50)]
+    return grid
+
+def saveGrid(start,goal,size,data,filePath):
+    file = open(filePath, "w")
+    file.write(str(start[0])+ " " + str(start[1]))
+    file.write("\n")
+    file.write(str(goal[0])+ " " + str(goal[1]))
+    file.write("\n")
+    file.write(str(size[0]) + " " + str(size[1]))
+    file.write("\n")
+    for x in range (1,size[0]+1):
+        for y in range(1,size[1]+1):
+            if data[y - 1][x - 1] == 1:
+                blocked = 1
+            else:
+                blocked = 0
+            file.write(str(x) + " " + str(y) + " " + str(blocked))
+            file.write("\n")
