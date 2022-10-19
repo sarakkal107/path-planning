@@ -1,7 +1,6 @@
 import grid
 from classes.Vertex import Vertex
-import optimizedMemorySearchAlgos
-import searchAlgos
+import searchAlgorithms
 import matplotlib.pyplot as plt
 import matplotlib
 
@@ -22,9 +21,7 @@ class App():
         else:
             title = "Theta* Algorithm"
 
-        goalVertex = searchAlgos.algosMain(start, goal, data, size,adjacents, typeOfAlgo)
-        # adjacents = {}
-        # goalVertex = initialSearchAlgos.algosMain(start, goal, data, size, adjacents, typeOfAlgo)
+        goalVertex = searchAlgorithms.algosMain(start, goal, data, size,adjacents, typeOfAlgo)
         if goalVertex == None:
             print("No path found")
             return None
@@ -65,9 +62,9 @@ class App():
         ax.legend()
         plt.axis('off')
 
+        print("\n")
         current = goalVertex
         print("Path from Goal to Start")
-        #print(str(size[0]) + " : " + str(size[1]))
         while (current.coords != start):
             currentParent = current.parent
             currentCoords = current.coords
@@ -83,5 +80,5 @@ class App():
                          zorder=50, color='red', linewidth=3, linestyle='dashed', clip_on=False)
             current = currentParent
         print(start)
-        plt.savefig("wrongThetaStar2.png")
+        #plt.savefig("wrongThetaStar2.png")
         plt.show()

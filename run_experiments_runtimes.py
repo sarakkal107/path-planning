@@ -25,6 +25,7 @@ average_non_opt_tests = []
 adjacents = {}
 adjacents2 = {}
 
+algoType = sys.argv[1]
 
 
 for count in range(0,10):
@@ -32,7 +33,7 @@ for count in range(0,10):
         filePath = line.strip()
         startTime = time.time()
         start, goal, size, data, visualizeData = grid.read_input(filePath)
-        goalVertex = searchAlgos.algosMain(start, goal, data, size, adjacents, "aStar")
+        goalVertex = searchAlgos.algosMain(start, goal, data, size, adjacents, algoType)
         runTime = time.time() - startTime
         opt_runtimes_list.append(runTime)
 
@@ -41,7 +42,7 @@ for count in range(0,10):
         filePath = line.strip()
         startTime = time.time()
         start, goal, size, data, visualizeData = grid.read_input(filePath)
-        goalVertex = nonOptimizedRuntimeSearchAlgos.algosMain(start, goal, data, size, adjacents, "aStar")
+        goalVertex = nonOptimizedRuntimeSearchAlgos.algosMain(start, goal, data, size, adjacents, algoType)
         runTime = time.time() - startTime
         non_opt_runtimes_list.append(runTime)
 
@@ -78,9 +79,9 @@ fig = plt.figure()
 # creating the bar plot
 plt.bar(equations,times, color ='blue', width = 0.4)
  
-plt.xlabel("A* Algorithms")
+plt.xlabel(algoType + " Algorithms")
 plt.ylabel("Average Runtime")
 plt.title("Difference in Runtimes")
-plt.savefig("RuntimeAnalysisAStar.png")
+plt.savefig("RuntimeAnalysis" + algoType + ".png")
 plt.show()
 

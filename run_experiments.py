@@ -25,14 +25,14 @@ average_non_opt_tests = []
 adjacents = {}
 adjacents2 = {}
 
-
+algoType = sys.argv[1]
 
 for count in range(0,10):
     for line in lines:
         filePath = line.strip()
         startTime = time.time()
         start, goal, size, data, visualizeData = grid.read_input(filePath)
-        goalVertex = searchAlgos.algosMain(start, goal, data, size, adjacents, "thetaStar")
+        goalVertex = searchAlgos.algosMain(start, goal, data, size, adjacents, algoType)
         runTime = time.time() - startTime
         opt_runtimes_list.append(runTime)
 
@@ -41,7 +41,7 @@ for count in range(0,10):
         filePath = line.strip()
         startTime = time.time()
         start, goal, size, data, visualizeData = grid.read_input(filePath)
-        goalVertex = optimizedMemorySearchAlgos.algosMain(start, goal, data, size, "thetaStar")
+        goalVertex = optimizedMemorySearchAlgos.algosMain(start, goal, data, size, algoType)
         runTime = time.time() - startTime
         non_opt_runtimes_list.append(runTime)
 
@@ -78,7 +78,7 @@ fig = plt.figure()
 # creating the bar plot
 plt.bar(equations,times, color ='blue', width = 0.4)
  
-plt.xlabel("Theta* Algorithms Adjacency List vs Booleans")
+plt.xlabel(algoType + " Algorithms Adjacency List vs Booleans")
 plt.ylabel("Average Runtime")
 plt.title("Difference in Runtimes")
 plt.savefig("RuntimeAnalysisThetaStarMem.png")
