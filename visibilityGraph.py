@@ -247,6 +247,7 @@ def algosMain(start,goal, data, size, adjacents, typeOfAlgo):
         term = s.coords
         closedSet.add(term)
         #print(adjacents[term])
+        print("\n")
         print("Current Vertex: " + str(term) + ", H: " + str(s.h) + " , F:" + str(s.f) + " , G:" + str(s.g))
         for adjacentVertexCoords in adjacents[s.coords]:
             adjacentVertex = Vertex(None, (adjacentVertexCoords[0], adjacentVertexCoords[1]))
@@ -402,9 +403,8 @@ def main():
                         zorder=50, color='green', linewidth=1.5, clip_on=False)
     
     current = goalVertex
-    printGraph(vertices)
+    print("\n")
     print("Path from Goal to Start")
-    print(str(size[0]) + " : " + str(size[1]))
     while (current.coords != start):
         currentParent = current.parent
         currentCoords = current.coords
