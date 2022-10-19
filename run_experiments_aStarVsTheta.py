@@ -5,7 +5,6 @@ import grid
 import optimizedMemorySearchAlgos
 import nonOptimizedRuntimeSearchAlgos
 import searchAlgos
-import searchAlgosRevisedH
 import time
 import statistics
 import matplotlib.pyplot as plt
