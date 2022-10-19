@@ -18,18 +18,25 @@ class Vertex:
     def yVal(self):
         return self.coords[0]
 
-    def equals(self, vertex2):
-        if self == None:
+    def __eq__(self, vertex2):
+        if vertex2 == None:
             return False
-        elif vertex2 == None:
+        elif self == None:
             return False
+        if (self.coords == vertex2.coords):
+            return True
         else:
-            return (self.coords[0] == vertex2.coords[0]) and (self.coords[1] == vertex2.coords[1])
+            return False
     
     def setH(self, xGoal, yGoal):
         xDifference = abs(self.coords[0] - xGoal)
         yDifference = abs(self.coords[1] - yGoal)
         self.h = math.sqrt(2) * float(min(xDifference,yDifference)) + float(max(xDifference,yDifference)) - float(min(xDifference, yDifference))
+
+    def setHtheta(self, xGoal, yGoal):
+        xDifference = abs(self.coords[0] - xGoal)
+        yDifference = abs(self.coords[1] - yGoal)
+        self.h = math.sqrt(float(xDifference**2) + float(yDifference**2))
 
     def setG(self, g):
         self.g = float(g)
@@ -38,5 +45,7 @@ class Vertex:
         self.f = float(self.g) + float(self.h)
 
     def __hash__(self):
-        return hash(str(self.coords))
+        return hash(self.coords)
+
+        
 

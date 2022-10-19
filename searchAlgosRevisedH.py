@@ -10,7 +10,7 @@ def algosMain(start,goal, data, size, adjacents, typeOfAlgo):
     fringe = minHeap() 
     closedSet = set()
 
-    startingVertex.setH(goal[0],goal[1])
+    startingVertex.setHtheta(goal[0],goal[1])
     startingVertex.setF
     startingVertex.setParent(startingVertex)
 
@@ -29,7 +29,7 @@ def algosMain(start,goal, data, size, adjacents, typeOfAlgo):
         term = str([s.coords[0],s.coords[1]])
         closedSet.add(term)
         #print(adjacents[term])
-        print("Current Vertex: " + term + ", H: " + str(s.h) + " , F:" + str(s.f) + " , G:" + str(s.g))
+        #print("Current Vertex: " + term + ", H: " + str(s.h) + " , F:" + str(s.f) + " , G:" + str(s.g))
         for adjacentVertexCoords in adjacents[term]:
             adjacentVertex = Vertex(None, [adjacentVertexCoords[0], adjacentVertexCoords[1]])
             adjacentTerm = str([adjacentVertexCoords[0],adjacentVertexCoords[1]])
@@ -121,7 +121,7 @@ def updateThetaStarVertex(s, adjacentVertex, fringe, data, size, goal):
             adjacentVertex.setParent(s.parent)
             if fringe.contains(adjacentVertex):
                 fringe.remove(adjacentVertex)
-            adjacentVertex.setH(goal[0], goal[1])
+            adjacentVertex.setHtheta(goal[0], goal[1])
             adjacentVertex.setF()
             fringe.insert(adjacentVertex)
 

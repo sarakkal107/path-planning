@@ -9,7 +9,7 @@ class minHeap:
         self.heap = []
 
     def parentOfNum(self, num):
-        return (num - 1) // 2 #In order to get parent, need the floor of the current number node in min-heap subtracted by 1 and divided by 2
+        return (num - 1) // 2 
     
     def leftChildOfNum(self,num):
         return 2 * num + 1
@@ -59,7 +59,7 @@ class minHeap:
     def insert(self, vertex):
         self.heap.append(vertex)
         self.size += 1
-        num = self.size - 1 # index of newly added vertex
+        num = self.size - 1 
         currentF = vertex.f
         parentF = self.heap[self.parentOfNum(num)].f
         while num > 0 and (currentF < parentF):

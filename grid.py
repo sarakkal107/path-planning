@@ -1,3 +1,4 @@
+from cmath import nan
 import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
@@ -8,8 +9,8 @@ import random
 def read_input(inputFile):
     f = open(inputFile, "r")
     contents = f.readlines()
-    start = list(map(int, contents[0].strip().split(" ")))
-    end = list(map(int, contents[1].strip().split(" ")))
+    start = tuple(map(int, contents[0].strip().split(" ")))
+    end = tuple(map(int, contents[1].strip().split(" ")))
     size = list(map(int, contents[2].strip().split(" ")))
 
     visualizeData = np.full([size[1], size[0]], np.nan)
@@ -23,7 +24,6 @@ def read_input(inputFile):
             visualizeData[temp[1]-1][temp[0]-1] = 1
             data[temp[1]-1][temp[0]-1] = 1
         i += 1
-    #generate_grid(size[1], size[0], visualizeData, start, end)
     return start, end, size, data, visualizeData
 
     # reads in the grid information
@@ -31,9 +31,9 @@ def read_input(inputFile):
 def generate_test(filePath):
     sizeX = 100
     sizeY = 50
-    data = create_grid_with_blocks()
+    data, visualizeData = create_grid_with_blocks()
     startX = 0
-    startY = 0
+    startY = -1
     goalX = 0
     goalY = 0
     validStart = False
@@ -55,12 +55,12 @@ def generate_test(filePath):
             elif count == 3:
                 adjacentX = startX - 1
                 adjacentY = startY
-            if (adjacentX > 0 and adjacentY > 0) and (adjacentX <=  100 and adjacentY <= 50) and (data[adjacentY - 1][adjacentX - 1]):
+            if (adjacentX > 0 and adjacentY > 0) and (adjacentX <=  100 and adjacentY <= 50) and (data[adjacentY - 1][adjacentX - 1]==0):
                 validStart = True
                 break
     while not validGoal:
         goalX = random.randint(1,101)
-        startY = random.randint(1,51)
+        goalY = random.randint(1,51)
 
         for count in range(4): #make sure that vertex isn't surrounded by 4 blocked cells
             if count == 0:
@@ -75,14 +75,14 @@ def generate_test(filePath):
             elif count == 3:
                 adjacentX = startX - 1
                 adjacentY = startY
-            if (adjacentX > 0 and adjacentY > 0) and (adjacentX <=  100 and adjacentY <= 50) and (data[adjacentY - 1][adjacentX - 1]) and (startX != goalX or startY != goalY):
+            if (adjacentX > 0 and adjacentY > 0) and (adjacentX <=  100 and adjacentY <= 50) and (data[adjacentY - 1][adjacentX - 1])==0 and (startX != goalX or startY != goalY):
                 validGoal = True
                 break
-    start = [startX,startY]
-    goal = [goalX,goalY]
+    start = (startX,startY)
+    goal = (goalX,goalY)
     size = [sizeX,sizeY]
-    saveGrid(start,goal,size,data,filePath)
-    return start,goal,size, data, data
+    visualizeData = saveGrid(start,goal,size,data,visualizeData, filePath)
+    return start,goal,size, data, visualizeData
 
 def generate_grid(x, y, data, start, end):
     fig, ax = plt.subplots(1, 1, tight_layout=True)
@@ -117,16 +117,19 @@ def generate_grid(x, y, data, start, end):
 
 def blocking():
     numIn100 = random.randint(1,100)
+    blockValue = 0
     if numIn100 < 11:
-        return 1
+        blockValue = 1
+        return blockValue
     else:
-        return 0
+        return blockValue
 
 def create_grid_with_blocks():
-    grid = [[blocking() for i in range(100)] for j in range(50)]
-    return grid
+    data = [[blocking() for i in range(100)] for j in range(50)]
+    visualizeData = [[np.nan for i in range(100)] for j in range(50)]
+    return data, visualizeData
 
-def saveGrid(start,goal,size,data,filePath):
+def saveGrid(start,goal,size,data,visualizeData, filePath):
     file = open(filePath, "w")
     file.write(str(start[0])+ " " + str(start[1]))
     file.write("\n")
@@ -134,11 +137,13 @@ def saveGrid(start,goal,size,data,filePath):
     file.write("\n")
     file.write(str(size[0]) + " " + str(size[1]))
     file.write("\n")
-    for x in range (1,size[0]+1):
-        for y in range(1,size[1]+1):
-            if data[y - 1][x - 1] == 1:
+    for x in range (0,size[0]):
+        for y in range(0,size[1]):
+            if data[y][x] == 1:
+                visualizeData[y][x] = 1
                 blocked = 1
             else:
                 blocked = 0
-            file.write(str(x) + " " + str(y) + " " + str(blocked))
+            file.write(str(x+1) + " " + str(y+1) + " " + str(blocked))
             file.write("\n")
+    return visualizeData

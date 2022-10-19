@@ -1,6 +1,6 @@
-#import tkinter as tk
 import grid
 from classes.Vertex import Vertex
+import optimizedMemorySearchAlgos
 import searchAlgos
 import matplotlib.pyplot as plt
 import matplotlib
@@ -10,23 +10,28 @@ class App():
 
     def __init__(self, inputOrTest, typeOfAlgo,inputFileOrTestPath):
 
-
+        adjacents = {}
         if (inputOrTest):
             start, goal, size, data, visualizeData = grid.read_input(inputFileOrTestPath)
         else:
             start, goal, size, data, visualizeData = grid.generate_test(inputFileOrTestPath)
-        grid.generate_grid(size[0],size[1], data, start, goal)
-        adjacents = {}
-        goalVertex = searchAlgos.algosMain(start, goal, data, size, adjacents, typeOfAlgo)
-        if goalVertex == None:
-            print("No path found")
-            return
-
+        
+        x, y = size[1], size[0]
         if (typeOfAlgo == 'aStar'):
             title = "A* Algorithm"
         else:
             title = "Theta* Algorithm"
 
+        goalVertex = searchAlgos.algosMain(start, goal, data, size,adjacents, typeOfAlgo)
+        # adjacents = {}
+        # goalVertex = initialSearchAlgos.algosMain(start, goal, data, size, adjacents, typeOfAlgo)
+        if goalVertex == None:
+            print("No path found")
+            return None
+        if (typeOfAlgo == 'aStar'):
+            title = "A* Algorithm"
+        else:
+            title = "Theta* Algorithm"
         x, y = size[1], size[0]
         fig, ax = plt.subplots(1, 1, tight_layout=True)
         fig.suptitle(title, fontsize=20)
@@ -78,5 +83,5 @@ class App():
                          zorder=50, color='red', linewidth=3, linestyle='dashed', clip_on=False)
             current = currentParent
         print(start)
-
+        plt.savefig("wrongThetaStar2.png")
         plt.show()

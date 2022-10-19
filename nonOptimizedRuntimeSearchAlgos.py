@@ -23,9 +23,8 @@ def algosMain(start,goal, data, size, adjacents, typeOfAlgo):
                 return s
         #print(s.coords)
         #print("s coords")
-        if (str(s.coords) not in adjacents):
-            add_vertex(s, adjacents)
-            addAdjacents(s,data,size,adjacents)
+        add_vertex(s, adjacents)
+        addAdjacents(s,data,size,adjacents)
         term = str((s.coords[0],s.coords[1]))
         closedSet.add(term)
         #print(adjacents[term])
@@ -185,6 +184,62 @@ def add_edge_weight(x1,y1, x2, y2, graph, w):
     v1 = str((x1,y1))
     v2 = (x2,y2)
     graph[v1].append(v2)
+
+def bfs(start, goal, data, size):
+    sizeX = size[0]
+    sizeY = size[1]
+    
+    fringe = list()
+    closed = set()
+    startVertex = Vertex(None, start)
+    fringe.append(startVertex)
+
+    while fringe:
+        s = fringe.pop(0)
+        if s.coords[0] == goal[0]:
+            if s.coords[1] == goal[1]:
+                return s
+        closed.add(s.coords)
+        for count in range(8):
+            sX = s.coords[0]
+            sY = s.coords[1]
+            if count == 0:
+                adjacentX = sX
+                adjacentY = sY - 1
+            elif count == 1:
+                adjacentX = sX
+                adjacentY = sY + 1
+            elif count == 2:
+                adjacentX = sX + 1
+                adjacentY = sY + 1
+            elif count == 3:
+                adjacentX = sX + 1
+                adjacentY = sY - 1
+            elif count == 4:
+                adjacentX = sX + 1
+                adjacentY = sY
+            elif count == 5:
+                adjacentX = sX - 1
+                adjacentY = sY
+            elif count == 7:
+                adjacentX = sX - 1
+                adjacentY = sY + 1
+            elif count == 8:
+                adjacentX = sX - 1
+                adjacentY = sY - 1
+            if not isEdge(sX,sY,adjacentX,adjacentY,data,size):
+                continue
+                  
+            if not isEdge(sX,sY,adjacentX,adjacentY,data,size):
+                continue
+            adjacentVertexCoords = (adjacentX,adjacentY)
+            adjacentVertex = Vertex(None,adjacentVertexCoords)
+            if not adjacentVertexCoords in closed:
+                if not adjacentVertex in fringe: 
+                    closed.add(str(adjacentVertexCoords))
+                    fringe.append(adjacentVertex)
+
+    return False
 
 def isEdge(curVertexX, curVertexY, nextVertexX, nextVertexY, data, size):
     if not (0 < nextVertexX and 0 < nextVertexY and nextVertexX <= size[0] + 1 and nextVertexY <= size[1] + 1):

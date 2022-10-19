@@ -5,8 +5,6 @@ import sys
 # gui.start_gui()
 
 # grid.generate_grid(3, 4)
-graph = {}
-size = []
 typeInput = True
 inputFile = sys.argv[1]
 if inputFile == "generateTest":
