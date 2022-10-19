@@ -17,6 +17,7 @@ python3 main.py experiment/test1.txt thetaStar
 # to generate test grids
 
 python3 main.py generateTest aStar filePath
+
 python3 main.py generateTest thetaStar filePath
 
 # to run experiments
@@ -27,11 +28,13 @@ python3 run_experiments_aStarVsTheta.py
 This experiment generates a bar graph of the changes to optimize the runtime in our A* script:
 
 python3 run_experiments_runtimes.py aStar
+
 python3 run_experiments_runtimes.py thetaStar
 
 This experiment generates a bar graph of the difference in runtimes of the memory-focused script and the efficiency-focused one:
 
 python3 run_experiments_runtimes_runtimes.py aStar
+
 python3 run_experiments_runtimes_runtimes.py thetaStar
 
 # This script generates a visibility graph of the input file and finds the true shortest path:
